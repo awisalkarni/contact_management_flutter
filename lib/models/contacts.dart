@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart';
 
 class Contacts {
@@ -87,7 +89,6 @@ class Contact {
   }
 
   Future<String> save() async {
-    print('saving user using a web service');
     return  await _makePostRequest();
   }
 
@@ -96,14 +97,14 @@ class Contact {
     String userId = id != null ? "/"+id : "";
     String url = 'https://mock-rest-api-server.herokuapp.com/api/v1/user'+userId;
     Map<String, String> headers = {"Content-type": "application/json"};
-    String json;
+    String json = "{}";
     Response response;
     // make request
     if (id != null) {
-      String json = '{"id": "$id", "firstName": "$firstName", "lastName": "$lastName", "email": "$email", "gender": "$gender", "date_of_birth": "$dateOfBirth", "phoneNo": "$phoneNo"}';
+      json = '{"id": "$id", "first_name": "${firstName.trim()}", "last_name": "${lastName.trim()}", "email": "${email.trim()}", "gender": "${gender.trim()}", "date_of_birth": "${dateOfBirth.millisecondsSinceEpoch/1000}", "phone_no": "${phoneNo.trim()}"}';
       response = await put(url, headers: headers, body: json);
     } else {
-      String json = '{"firstName": "$firstName", "lastName": "$lastName", "email": "$email", "gender": "$gender", "date_of_birth": "$dateOfBirth", "phoneNo": "$phoneNo"}';
+      json = '{"first_name": "${firstName.trim()}", "last_name": "${lastName.trim()}", "email": "${email.trim()}", "gender": "${gender.trim()}", "date_of_birth": "${(dateOfBirth.millisecondsSinceEpoch/1000).round()}", "phone_no": "${phoneNo.trim()}"}';
       response = await post(url, headers: headers, body: json);
     }
 
@@ -111,13 +112,15 @@ class Contact {
     int statusCode = response.statusCode;
 //    // this API passes back the id of the new item added to the body
     String body = response.body;
-    print(body);
-    print(json);
+
+    print('payload $json, url: $url, response: $body, id: $id');
+
+    final decodedResponse = jsonDecode(body);
 
     if (statusCode == 200) {
       return 'Save successful';
     } else {
-      return 'Save failed. Status code $statusCode';
+      return 'Save failed. Status code $statusCode. ${decodedResponse['error'] ?? ""}';
     }
   }
 }

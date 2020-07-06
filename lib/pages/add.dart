@@ -92,7 +92,7 @@ class _AddPageState extends State {
                                     containerHeight: 210.0,
                                   ),
                                   showTitleActions: true,
-                                  minTime: DateTime(2000, 1, 1),
+                                  minTime: DateTime(1900, 1, 1),
                                   maxTime: DateTime(2022, 12, 31), onConfirm: (date) {
                                     print('confirm $date');
                                     _dob = '${date.day}/${date.month}/${date.year}';
@@ -157,6 +157,10 @@ class _AddPageState extends State {
                                       _showDialog(context, 'Submitting form');
                                       String status = await _contact.save();
                                       _showDialog(context, status);
+
+                                      if (status.contains("successful")) {
+                                        Navigator.pop(context);
+                                      }
 
                                     }
                                   },
