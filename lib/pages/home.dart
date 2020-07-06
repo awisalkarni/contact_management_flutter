@@ -23,6 +23,8 @@ class HomePage extends StatefulWidget {
 
 class _HomeState extends State<HomePage> {
   final TextEditingController _filter = new TextEditingController();
+  final globalKey = GlobalKey<ScaffoldState>();
+
 
   Contacts _records = new Contacts();
   Contacts _filteredRecords = new Contacts();
@@ -132,6 +134,7 @@ class _HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: globalKey,
       appBar: _buildBar(context),
       backgroundColor: Colors.blue,
       body: _buildList(context),
@@ -279,9 +282,15 @@ class _HomeState extends State<HomePage> {
           caption: 'Delete',
           color: Colors.red,
           icon: Icons.delete,
-          onTap: () {
+          onTap: () async {
+
+            String response = await contact.removeContact();
+            final snackBar = SnackBar(content: Text(response));
+            globalKey.currentState.showSnackBar(snackBar);
+
             setState(() {
               _filteredRecords.data.remove(contact);
+
             });
           },
         ),

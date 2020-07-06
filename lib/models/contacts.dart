@@ -92,6 +92,29 @@ class Contact {
     return  await _makePostRequest();
   }
 
+  Future<String> removeContact() async {
+
+    String userId = id;
+    Map<String, String> headers = {"Content-type": "application/json"};
+    String url = 'https://mock-rest-api-server.herokuapp.com/api/v1/user/$id';
+    Response response = await delete(url, headers: headers);
+
+    int statusCode = response.statusCode;
+//    // this API passes back the id of the new item added to the body
+    String body = response.body;
+
+    print('delete: status: $statusCode, body: $body');
+
+    final decodedResponse = jsonDecode(body);
+
+    if (statusCode == 200) {
+      return 'Delete successful';
+    } else {
+      return 'Delete failed. Status code $statusCode. ${decodedResponse['error'] ?? ""}';
+    }
+
+  }
+
   Future<String> _makePostRequest() async {
     // set up POST request arguments
     String userId = id != null ? "/"+id : "";
