@@ -1,6 +1,18 @@
 # contact_management_flutter
 
-Binary Assessment
+Contact Management System using flutter
+
+# Checklist
+
+- The app should support android 6 and above.
+- The app should have the option to work offline.
+- The app should have the following input fields: Name, DOB, Profile photo, Mobile number.
+- Users should be able to add contacts to the list.
+- Users should be able to update or delete a contact using the slide gesture.
+- Users should be able to search and filter the contact list.
+- Users should be able to add contacts to the favourite list.
+- Users should be able to change the order of favourites using drag-n-drop gesture.
+- Users should be able to remove contacts from the favourite list.
 
 ## Getting Started
 
